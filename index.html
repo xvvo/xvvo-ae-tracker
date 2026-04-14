@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AE Time Tracker — Help & Info</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #141414;
+      --bg2:       #1a1a1a;
+      --bg3:       #202020;
+      --border:    #2a2a2a;
+      --border2:   #333;
+      --text:      #d0d0d0;
+      --muted:     #707070;
+      --dim:       #404040;
+      --accent:    #a8f0ff;
+      --accent2:   #6dd0e8;
+      --green:     #7ecba1;
+      --yellow:    #f0c040;
+      --red:       #ff6677;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #101010e8;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 52px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .nav-brand .name {
+      font-size: 16px;
+      font-weight: 400;
+      color: #e0e0e0;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .nav-brand .handle {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 32px 70px;
+      max-width: 780px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      border: 1px solid #a8f0ff22;
+      background: #a8f0ff08;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 58px);
+      font-weight: 200;
+      color: #e8e8e8;
+      letter-spacing: 2px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+
+    /* ── SECTION ── */
+    section { margin-bottom: 70px; }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    h2 {
+      font-size: 26px;
+      font-weight: 300;
+      color: #e0e0e0;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 400;
+      color: #c0c0c0;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    p { color: var(--muted); margin-bottom: 14px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── FEATURE GRID ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .feature-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: #a8f0ff22;
+      background: #a8f0ff05;
+    }
+
+    .feat-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #a8f0ff10;
+      border: 1px solid #a8f0ff18;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .feat-icon svg { width: 16px; height: 16px; }
+
+    .feature-card h3 {
+      font-size: 13px;
+      font-weight: 400;
+      color: #c8c8c8;
+      margin-bottom: 6px;
+    }
+
+    .feature-card p {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps { margin-top: 28px; display: flex; flex-direction: column; gap: 1px; }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step:last-child { border-bottom: none; }
+
+    .step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--dim);
+      min-width: 24px;
+      padding-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .step-body h3 {
+      font-size: 14px;
+      font-weight: 400;
+      color: #c0c0c0;
+      margin-bottom: 5px;
+    }
+
+    .step-body p {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* ── STATUS INDICATORS ── */
+    .status-list {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 4px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot.green  { background: #00ff88; box-shadow: 0 0 8px #00ff8844; }
+    .dot.yellow { background: #f0c040; }
+    .dot.orange { background: #ffaa00; }
+    .dot.red    { background: #ff4455; }
+
+    .status-item .label {
+      font-size: 13px;
+      color: #aaa;
+      font-weight: 400;
+      min-width: 160px;
+    }
+
+    .status-item .desc {
+      font-size: 12px;
+      color: var(--dim);
+    }
+
+    /* ── SETTINGS CARDS ── */
+    .settings-list { margin-top: 24px; display: flex; flex-direction: column; gap: 8px; }
+
+    .setting-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+
+    .setting-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .setting-name {
+      font-size: 13px;
+      font-weight: 400;
+      color: #c0c0c0;
+    }
+
+    .toggle-demo {
+      width: 28px;
+      height: 15px;
+      border-radius: 8px;
+      background: #1a3a40;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .toggle-demo::after {
+      content: '';
+      position: absolute;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--accent);
+      top: 2px;
+      left: 15px;
+    }
+
+    .setting-card p {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* ── EXPORT SECTION ── */
+    .export-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 500px) { .export-cards { grid-template-columns: 1fr; } }
+
+    .export-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .export-card .tag {
+      display: inline-block;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      background: #a8f0ff10;
+      color: var(--accent2);
+      border: 1px solid #a8f0ff20;
+    }
+
+    .export-card h3 {
+      font-size: 14px;
+      color: #c0c0c0;
+      margin-bottom: 6px;
+    }
+
+    .export-card p {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .file-preview {
+      margin-top: 16px;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 6px;
+      padding: 14px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .file-preview .hl { color: #a8d8f0; }
+    .file-preview .hl2 { color: #7ecba1; }
+
+    /* ── DATA STORAGE ── */
+    .data-path {
+      margin-top: 16px;
+      background: #0d1a1f;
+      border: 1px solid #a8f0ff18;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--accent2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .data-path .path-icon { color: var(--muted); font-size: 11px; flex-shrink: 0; }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 24px; }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-q {
+      font-size: 14px;
+      font-weight: 400;
+      color: #c0c0c0;
+      margin-bottom: 8px;
+    }
+
+    .faq-a {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      background: #1e1e1e;
+      border: 1px solid var(--border2);
+      border-radius: 4px;
+      padding: 1px 6px;
+      color: var(--accent2);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    footer .brand {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      color: #555;
+      text-transform: uppercase;
+    }
+
+    footer .foot-right {
+      font-size: 11px;
+      color: var(--dim);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── GLOW DIVIDER ── */
+    .glow-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #a8f0ff18, transparent);
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .hero { padding: 50px 20px 40px; }
+      .container { padding: 0 20px 60px; }
+      footer { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-brand">
+      <span class="name">xvvo</span>
+      <span class="handle">@1xvvo</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#how-it-works">How it works</a></li>
+      <li><a href="#status">Status</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#export">Export</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-tag">After Effects CEP Extension</div>
+    <h1>AE Time <span>Tracker</span></h1>
+    <p>Automatic, per-project time tracking that lives inside After Effects. No setup. Just open a project and it starts.</p>
+  </div>
+
+  <div class="glow-line"></div>
+
+  <div class="container">
+
+    <!-- FEATURES -->
+    <section id="features">
+      <div class="section-label">Features</div>
+      <div class="feature-grid">
+
+        <div class="feature-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="6" stroke="#a8f0ff" stroke-width="1.2"/>
+              <path d="M8 5v3.5l2 1.5" stroke="#a8f0ff" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Automatic tracking</h3>
+          <p>Starts the moment you open a project in After Effects, stops when you switch away or close it. Completely hands-free.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="3" width="12" height="10" rx="2" stroke="#a8f0ff" stroke-width="1.2"/>
+              <path d="M5 7h6M5 10h4" stroke="#a8f0ff" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Per-project memory</h3>
+          <p>Every project gets its own total. Switch between projects freely — each one accumulates independently.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 12L6 7l3 3 2-4 2 5" stroke="#a8f0ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Session history</h3>
+          <p>Every work session is logged with its date, start time, end time, and duration. Click any project to expand it.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 2v8M5 7l3 3 3-3" stroke="#a8f0ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 13h10" stroke="#a8f0ff" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Export reports</h3>
+          <p>Generate a detailed stats report (.txt) or a full CSV of all sessions — exportable to any folder you choose.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="8" cy="8" r="5" stroke="#a8f0ff" stroke-width="1.2"/>
+              <path d="M8 5.5v2.5l1.5 1.5" stroke="#a8f0ff" stroke-width="1.2" stroke-linecap="round"/>
+              <circle cx="12.5" cy="3.5" r="2" fill="#f0c040" fill-opacity="0.8"/>
+            </svg>
+          </div>
+          <h3>Idle detection</h3>
+          <p>If you haven't done anything in AE for 5 minutes, the timer pauses automatically. Resume working and it picks back up.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 2C5.8 2 4 3.8 4 6c0 3 4 8 4 8s4-5 4-8c0-2.2-1.8-4-4-4z" stroke="#a8f0ff" stroke-width="1.2"/>
+              <circle cx="8" cy="6" r="1.5" stroke="#a8f0ff" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <h3>Offline — no account</h3>
+          <p>Everything is stored locally in your Documents folder. No internet connection, no account, no subscription needed.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works">
+      <div class="section-label">How it works</div>
+      <h2>Fully automatic tracking</h2>
+      <p>The extension polls After Effects every 2 seconds to detect which project file is active. You never need to press anything.</p>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <div class="step-body">
+            <h3>Open a project in After Effects</h3>
+            <p>The extension detects the project file path automatically. The timer starts and the status dot turns green.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <div class="step-body">
+            <h3>Work normally</h3>
+            <p>The timer runs in the background. The extension watches for any AE activity (layer changes, timeline moves, etc.) to detect if you're actively working.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <div class="step-body">
+            <h3>Switch apps or close AE</h3>
+            <p>If you switch to another application, Grace Period kicks in — the timer keeps running for 60 seconds before pausing, in case you just alt-tabbed briefly.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">04</span>
+          <div class="step-body">
+            <h3>Come back to AE</h3>
+            <p>Focus returns to After Effects, the timer resumes immediately. The session continues from where it left off.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">05</span>
+          <div class="step-body">
+            <h3>Data is auto-saved</h3>
+            <p>Every 10 seconds, accumulated time is written to disk at <code>Documents/AETimeTracker/data.json</code>. Nothing is lost even if AE crashes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATUS INDICATORS -->
+    <section id="status">
+      <div class="section-label">Status indicators</div>
+      <h2>Reading the status dot</h2>
+      <p>The small dot in the top-left of the panel tells you exactly what's happening at a glance.</p>
+
+      <div class="status-list">
+        <div class="status-item">
+          <div class="dot green"></div>
+          <span class="label">Tracking</span>
+          <span class="desc">Timer is running. AE is focused and you have a project open. The dot pulses with a soft glow.</span>
+        </div>
+        <div class="status-item">
+          <div class="dot yellow"></div>
+          <span class="label">Idle — paused</span>
+          <span class="desc">No activity detected in AE for 5 minutes. Timer is paused. Move anything in AE to resume.</span>
+        </div>
+        <div class="status-item">
+          <div class="dot orange"></div>
+          <span class="label">Grace period…</span>
+          <span class="desc">AE lost focus but the timer is still running. It will stop after 60 seconds if you don't return.</span>
+        </div>
+        <div class="status-item">
+          <div class="dot red"></div>
+          <span class="label">Paused / No project</span>
+          <span class="desc">Either no project is open, AE is not focused, or tracking is paused for another reason.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECT LIST -->
+    <section id="project-list">
+      <div class="section-label">Project list</div>
+      <h2>Interacting with tracked projects</h2>
+      <p>The scrollable list at the bottom of the panel shows every project you've ever tracked, sorted by most time spent.</p>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1×</span>
+          <div class="step-body">
+            <h3>Single click — expand session history</h3>
+            <p>Expands the project row to show your last 8 work sessions: date, time range (e.g. <code>09:14 – 11:02</code>), and duration. Click again to collapse.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">2×</span>
+          <div class="step-body">
+            <h3>Double click — view project time in the big timer</h3>
+            <p>The main timer at the top switches to show that project's total, even if it's not currently open. A <em>viewing</em> badge appears above the timer. Double click again to return to the active project.</p>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top: 16px; font-size: 13px;">The currently active project is highlighted with a blue-green left border and brighter text. The project you're "viewing" gets a lighter blue highlight.</p>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="settings">
+      <div class="section-label">Settings</div>
+      <h2>Toggles explained</h2>
+      <p>Both settings are saved to disk automatically and persist between sessions.</p>
+
+      <div class="settings-list">
+        <div class="setting-card">
+          <div class="setting-header">
+            <span class="setting-name">Grace Period</span>
+            <div class="toggle-demo"></div>
+          </div>
+          <p>When After Effects loses focus (you switch to Figma, a browser, etc.), the timer doesn't stop immediately. It waits <strong style="color: #c0c0c0; font-weight: 400;">60 seconds</strong> before pausing — so quick alt-tabs don't break your session. If you return to AE within that window, tracking continues seamlessly and the grace period cancels.</p>
+          <p style="margin-top: 10px;">Turn this off if you want the timer to stop the instant AE loses focus.</p>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-header">
+            <span class="setting-name">Idle Pause <span style="font-size: 11px; color: var(--dim); letter-spacing: 0; text-transform: none;">5 min</span></span>
+            <div class="toggle-demo"></div>
+          </div>
+          <p>Every 30 seconds, the extension checks whether anything changed in your AE project (layer count, timeline position, selected layers, active comp, etc.). If nothing has changed for <strong style="color: #c0c0c0; font-weight: 400;">5 minutes</strong>, tracking pauses and the dot turns yellow.</p>
+          <p style="margin-top: 10px;">As soon as you do anything in AE, it detects the change and resumes automatically. Turn this off if you want the timer to keep running even when you're thinking or stepping away.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPORT -->
+    <section id="export">
+      <div class="section-label">Export</div>
+      <h2>Exporting your data</h2>
+      <p>Both export buttons ask you to choose a save folder via a native folder picker dialog, then write the file there immediately.</p>
+
+      <div class="export-cards">
+        <div class="export-card">
+          <div class="tag">.txt</div>
+          <h3>Export Stats</h3>
+          <p>A human-readable report for the currently open project. Includes time spent, comp breakdown, layer counts by type, every effect used and how many times, and all linked footage files.</p>
+          <div class="file-preview">
+            <span class="hl">AE PROJECT STATS REPORT</span><br>
+            ═══════════════════<br>
+            Project   : <span class="hl2">myspot_v3.aep</span><br>
+            Time Spent: <span class="hl">02:14:38</span><br><br>
+            OVERVIEW<br>
+            ───────────────────<br>
+            Compositions : 4<br>
+            Total Layers : 87<br>
+            Text Layers  : 12
+          </div>
+        </div>
+
+        <div class="export-card">
+          <div class="tag">.csv</div>
+          <h3>Export CSV</h3>
+          <p>A spreadsheet-ready export of every session across all tracked projects. Each row is one work session: project name, date, start time, end time, duration, and total minutes.</p>
+          <div class="file-preview">
+            <span class="hl">Project,Date,Start,End,Duration</span><br>
+            <span class="hl2">myspot_v3</span>,2025-01-14,<br>
+            09:14,11:02,<span class="hl">01:47:52</span><br>
+            <span class="hl2">reel_v1</span>,2025-01-13,<br>
+            14:30,16:00,<span class="hl">01:30:00</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DATA STORAGE -->
+    <section id="data">
+      <div class="section-label">Data storage</div>
+      <h2>Where your data lives</h2>
+      <p>All tracking data is saved locally in a JSON file in your Documents folder. No cloud, no account — it's just a file on your computer.</p>
+
+      <div class="data-path">
+        <span class="path-icon">📂</span>
+        <span>Documents / AETimeTracker / data.json</span>
+      </div>
+
+      <p style="margin-top: 16px; font-size: 13px;">The file is written every 10 seconds while tracking, so data is preserved even if After Effects crashes. You can open <code>data.json</code> in any text editor to inspect or back up your records manually.</p>
+      <p style="font-size: 13px;">Settings (Grace Period and Idle Pause toggles) are also saved inside this file under a <code>_settings</code> key, so your preferences survive reinstalling the extension.</p>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="section-label">FAQ</div>
+      <h2>Common questions</h2>
+
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <div class="faq-q">The timer isn't starting when I open a project.</div>
+          <div class="faq-a">Make sure the panel is visible (Window → AE Time Tracker). If it's open but hidden behind another panel, it still works — but check the status dot color. If it's red and says "No project open", try closing and re-opening your <code>.aep</code> file. The extension polls for a saved project path, so unsaved new projects won't register.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">It says "Paused" even though I'm actively working.</div>
+          <div class="faq-a">This usually means After Effects doesn't currently have focus in the OS — another window is on top. Click anywhere inside AE to bring it to the front. If Grace Period is enabled, tracking resumes immediately. If it's disabled, you need to click back into AE.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">The Idle Pause keeps pausing me when I'm actually working.</div>
+          <div class="faq-a">Idle detection works by watching for changes in the AE state hash (layer count, timeline position, selected layers, active comp). If you're doing something like rendering or just reviewing your comp without making changes, it may not detect activity. You can turn off Idle Pause in the settings row at the top of the panel.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">My old project data disappeared after reinstalling.</div>
+          <div class="faq-a">Data is stored at <code>Documents/AETimeTracker/data.json</code>. Reinstalling the extension doesn't touch that file, so your data should be safe. If it's gone, check if Documents is syncing to the cloud (iCloud, OneDrive) and may have been moved.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Can I track multiple projects at once?</div>
+          <div class="faq-a">No — only one project can be "active" in After Effects at a time. Each project tracks independently, and switching projects stops tracking on the previous one and starts it on the new one.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">Does this work on macOS and Windows?</div>
+          <div class="faq-a">Yes. The extension is a standard CEP panel and runs on both platforms. File paths are handled correctly on both systems.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">What After Effects versions are supported?</div>
+          <div class="faq-a">AE CC 2019 (version 16.0) and later. The manifest targets CSXS 7.0 which covers all modern versions.</div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-q">How do I reset a project's time?</div>
+          <div class="faq-a">Open <code>Documents/AETimeTracker/data.json</code> in a text editor, find the entry for your project's file path, and delete or zero out the <code>total</code> field and clear the <code>sessions</code> array. Save the file, then reopen After Effects.</div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <span class="brand">xvvo</span>
+    <span class="foot-right">AE Time Tracker — free, local, no account required</span>
+  </footer>
+
+</body>
+</html>
