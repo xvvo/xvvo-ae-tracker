@@ -1,270 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VAUX — Project intelligence for After Effects</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #141414; --bg2: #1a1a1a; --border: #252525;
-      --text: #c8c8c8; --muted: #666; --dim: #3a3a3a;
-      --accent: #a8f0ff; --accent2: #6dd0e8;
-    }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-weight: 300; font-size: 13px; line-height: 1.65; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VAUX Help</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-    /* NAV */
-    nav { position: sticky; top: 0; z-index: 100; background: #101010f0; backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 28px; height: 46px; }
-    .nav-brand { display: flex; align-items: baseline; gap: 10px; }
-    .nav-brand .name { font-size: 15px; font-weight: 500; color: #e8e8e8; letter-spacing: 5px; text-transform: uppercase; }
-    .nav-brand .by { font-size: 10px; color: var(--muted); letter-spacing: 0.5px; }
-    .nav-links { display: flex; gap: 20px; list-style: none; }
-    .nav-links a { font-size: 10px; color: var(--muted); text-decoration: none; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--accent); }
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
 
-    /* HERO */
-    .hero { padding: 60px 28px 50px; max-width: 680px; margin: 0 auto; text-align: center; }
-    .hero-tag { display: inline-block; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent2); border: 1px solid #a8f0ff20; background: #a8f0ff08; padding: 3px 10px; border-radius: 20px; margin-bottom: 20px; }
-    .hero h1 { font-size: clamp(52px, 10vw, 80px); font-weight: 200; color: #efefef; letter-spacing: 12px; line-height: 1; margin-bottom: 16px; text-transform: uppercase; }
-    .hero-sub { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
-    .hero-handle { font-size: 11px; color: var(--dim); letter-spacing: 0.5px; }
+:root{
+  --bg:#0f0f12;
+  --card:#18181c;
+  --border:#26262b;
+  --text:#e8e8ea;
+  --muted:#8a8a95;
+  --accent:#7cf3ff;
+  --accent2:#a78bfa;
+}
 
-    /* CONTAINER */
-    .container { max-width: 680px; margin: 0 auto; padding: 0 28px 64px; }
-    section { margin-bottom: 52px; }
+body{
+  font-family:'Outfit',sans-serif;
+  background:radial-gradient(circle at top,#15151a,#0d0d10);
+  color:var(--text);
+  font-size:13px;
+}
 
-    .section-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.wrapper{
+  max-width:920px;
+  margin:0 auto;
+  padding:40px 20px 80px;
+}
 
-    h2 { font-size: 20px; font-weight: 300; color: #ddd; margin-bottom: 8px; }
-    p { color: var(--muted); margin-bottom: 12px; }
-    p:last-child { margin-bottom: 0; }
+/* HERO */
+.hero{
+  text-align:center;
+  margin-bottom:40px;
+}
 
-    /* FEATURE GRID */
-    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; margin-top: 20px; }
-    .feature-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
-    .feature-card h3 { font-size: 12px; font-weight: 400; color: #bbb; margin-bottom: 4px; }
-    .feature-card p { font-size: 11px; color: var(--muted); margin: 0; line-height: 1.55; }
+.hero h1{
+  font-size:48px;
+  letter-spacing:6px;
+  margin-bottom:10px;
+}
 
-    /* STEPS */
-    .steps { margin-top: 20px; }
-    .step { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-    .step:last-child { border-bottom: none; }
-    .step-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--dim); min-width: 20px; padding-top: 1px; flex-shrink: 0; }
-    .step-body h3 { font-size: 12px; font-weight: 400; color: #bbb; margin-bottom: 3px; }
-    .step-body p { font-size: 11px; color: var(--muted); margin: 0; }
+.hero p{
+  color:var(--muted);
+}
 
-    /* STATUS */
-    .status-list { margin-top: 18px; display: flex; flex-direction: column; gap: 4px; }
-    .status-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; }
-    .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .dot.green { background: #00ff88; } .dot.yellow { background: #f0c040; } .dot.orange { background: #ffaa00; } .dot.red { background: #ff4455; }
-    .status-item .label { font-size: 12px; color: #aaa; font-weight: 400; min-width: 140px; }
-    .status-item .desc { font-size: 11px; color: var(--dim); }
+/* SUMMARY BOX */
+.summary{
+  background:linear-gradient(135deg,#1a1a22,#14141a);
+  border:1px solid var(--border);
+  padding:18px;
+  border-radius:10px;
+  margin-bottom:30px;
+}
 
-    /* SETTINGS */
-    .settings-list { margin-top: 18px; display: flex; flex-direction: column; gap: 6px; }
-    .setting-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
-    .setting-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-    .setting-name { font-size: 12px; font-weight: 400; color: #bbb; }
-    .toggle-demo { width: 26px; height: 14px; border-radius: 7px; background: #1a3a40; position: relative; flex-shrink: 0; }
-    .toggle-demo::after { content: ''; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); top: 2px; left: 14px; }
-    .setting-card p { font-size: 11px; color: var(--muted); margin: 0; }
+.summary h3{
+  font-size:14px;
+  margin-bottom:6px;
+}
 
-    /* EXPORT */
-    .export-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
-    @media (max-width: 480px) { .export-cards { grid-template-columns: 1fr; } }
-    .export-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 14px 16px; }
-    .export-card .tag { display: inline-block; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; margin-bottom: 8px; background: #a8f0ff10; color: var(--accent2); border: 1px solid #a8f0ff18; font-family: 'JetBrains Mono', monospace; }
-    .export-card h3 { font-size: 12px; font-weight: 400; color: #bbb; margin-bottom: 4px; }
-    .export-card p { font-size: 11px; color: var(--muted); margin: 0; }
+.summary p{
+  font-size:12px;
+  color:var(--muted);
+}
 
-    /* FAQ */
-    .faq-list { margin-top: 18px; }
-    .faq-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
-    .faq-item:last-child { border-bottom: none; }
-    .faq-q { font-size: 12px; font-weight: 400; color: #bbb; margin-bottom: 5px; }
-    .faq-a { font-size: 11px; color: var(--muted); line-height: 1.6; }
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
+}
 
-    code { font-family: 'JetBrains Mono', monospace; font-size: 10px; background: #1e1e1e; border: 1px solid #2e2e2e; border-radius: 3px; padding: 1px 5px; color: var(--accent2); }
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:16px;
+  border-radius:10px;
+  transition:.2s;
+}
 
-    /* FOOTER */
-    footer { border-top: 1px solid var(--border); padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .footer-left { display: flex; align-items: baseline; gap: 8px; }
-    .footer-left .brand { font-size: 15px; font-weight: 500; letter-spacing: 5px; color: #444; text-transform: uppercase; }
-    .footer-left .by { font-size: 10px; color: var(--dim); }
-    footer .foot-right { font-size: 10px; color: var(--dim); }
+.card:hover{
+  border-color:var(--accent);
+  transform:translateY(-2px);
+}
 
-    @media (max-width: 560px) { nav { padding: 0 16px; } .nav-links { display: none; } .hero, .container { padding-left: 16px; padding-right: 16px; } }
-  </style>
+.card h3{
+  font-size:13px;
+  margin-bottom:6px;
+}
+
+.card p{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* SECTION */
+.section{
+  margin-top:40px;
+}
+
+.section h2{
+  font-size:16px;
+  margin-bottom:12px;
+}
+
+/* STEPS */
+.steps{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.step{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:12px;
+  border-radius:8px;
+  display:flex;
+  gap:10px;
+}
+
+.num{
+  color:var(--accent2);
+  font-weight:600;
+}
+
+/* STATUS DOTS */
+.status{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.status div{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--card);
+  padding:10px;
+  border-radius:8px;
+  border:1px solid var(--border);
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+}
+
+.green{background:#00ff88}
+.yellow{background:#ffd166}
+.orange{background:#ff9f1c}
+.red{background:#ff4d6d}
+
+/* FUN COLOR BAR */
+.topbar{
+  height:3px;
+  background:linear-gradient(90deg,#7cf3ff,#a78bfa,#ff7ac6);
+  margin-bottom:30px;
+  border-radius:10px;
+}
+
+</style>
 </head>
+
 <body>
+<div class="wrapper">
 
-  <nav>
-    <div class="nav-brand">
-      <span class="name">VAUX</span>
-      <span class="by">by xvvo</span>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#how-it-works">How it works</a></li>
-      <li><a href="#status">Status</a></li>
-      <li><a href="#settings">Settings</a></li>
-      <li><a href="#faq">FAQ</a></li>
-    </ul>
-  </nav>
+<div class="topbar"></div>
 
-  <div class="hero">
-    <div class="hero-tag">After Effects CEP Extension</div>
-    <h1>VAUX</h1>
-    <p class="hero-sub">Project intelligence for After Effects</p>
-    <p class="hero-handle">by xvvo — @1xvvo</p>
+<div class="hero">
+  <h1>VAUX</h1>
+  <p>After Effects time tracker</p>
+</div>
+
+<div class="summary">
+  <h3>Quick Summary</h3>
+  <p>VAUX automatically tracks how long you spend in each After Effects project. It runs in the background, pauses when you're inactive, and logs everything—no setup required.</p>
+</div>
+
+<div class="grid">
+  <div class="card"><h3>Auto tracking</h3><p>Starts and stops automatically.</p></div>
+  <div class="card"><h3>Per project</h3><p>Each project keeps its own time.</p></div>
+  <div class="card"><h3>Idle pause</h3><p>Stops after 5 minutes inactivity.</p></div>
+  <div class="card"><h3>Exports</h3><p>CSV + full stats available.</p></div>
+</div>
+
+<div class="section">
+  <h2>How it works</h2>
+  <div class="steps">
+    <div class="step"><span class="num">1.</span><p>Open a saved project</p></div>
+    <div class="step"><span class="num">2.</span><p>Work normally</p></div>
+    <div class="step"><span class="num">3.</span><p>Leave AE → grace period</p></div>
+    <div class="step"><span class="num">4.</span><p>Come back → resumes instantly</p></div>
   </div>
+</div>
 
-  <div class="container">
-
-    <section id="features">
-      <div class="section-label">Features</div>
-      <div class="feature-grid">
-        <div class="feature-card"><h3>Automatic time tracking</h3><p>Starts when you open a project, stops when you switch or close. No setup, no pressing anything.</p></div>
-        <div class="feature-card"><h3>Per-project memory</h3><p>Every project accumulates its own total independently. Switch between them freely.</p></div>
-        <div class="feature-card"><h3>Session history</h3><p>Every work session logged with date, start/end time, and duration. Click a project to expand it.</p></div>
-        <div class="feature-card"><h3>Idle detection</h3><p>No activity in AE for 5 min? Timer pauses. Work again and it picks back up automatically.</p></div>
-        <div class="feature-card"><h3>Project stats export</h3><p>Dump a full breakdown of your project — comps, layers by type, every effect used, footage files.</p></div>
-        <div class="feature-card"><h3>CSV export</h3><p>Export every session across all projects to a spreadsheet. Dates, times, durations — all there.</p></div>
-        <div class="feature-card"><h3>Grace period</h3><p>Alt-tab to a browser without killing your session. Timer keeps running for 60 seconds before pausing.</p></div>
-        <div class="feature-card"><h3>Fully offline</h3><p>No internet, no account, no subscription. Everything stays on your machine.</p></div>
-      </div>
-    </section>
-
-    <section id="how-it-works">
-      <div class="section-label">How it works</div>
-      <h2>Automatic, always</h2>
-      <p>VAUX polls After Effects every second from inside AE's own engine — not the panel UI. That means tracking continues even if the panel is closed or undocked.</p>
-      <div class="steps">
-        <div class="step"><span class="step-num">01</span><div class="step-body"><h3>Open a saved project</h3><p>VAUX detects the file path instantly. Status dot turns green, timer starts.</p></div></div>
-        <div class="step"><span class="step-num">02</span><div class="step-body"><h3>Work normally</h3><p>Timer runs in the background. AE activity is watched every 30 seconds for idle detection.</p></div></div>
-        <div class="step"><span class="step-num">03</span><div class="step-body"><h3>Switch apps or close the panel</h3><p>Grace Period keeps the clock running for 60 seconds. Closing the panel entirely doesn't stop tracking — it keeps going inside AE.</p></div></div>
-        <div class="step"><span class="step-num">04</span><div class="step-body"><h3>Come back to AE</h3><p>Focus returns, timer resumes immediately. No lost time.</p></div></div>
-        <div class="step"><span class="step-num">05</span><div class="step-body"><h3>Auto-saved every 10 seconds</h3><p>Data is flushed to disk regularly. Even if AE crashes, you lose at most 10 seconds.</p></div></div>
-      </div>
-    </section>
-
-    <section id="status">
-      <div class="section-label">Status dot</div>
-      <h2>What the dot means</h2>
-      <p>The small dot in the top-left of the panel tells you the current state at a glance.</p>
-      <div class="status-list">
-        <div class="status-item"><div class="dot green"></div><span class="label">Tracking</span><span class="desc">AE is focused, project is open, timer is running.</span></div>
-        <div class="status-item"><div class="dot yellow"></div><span class="label">Idle — paused</span><span class="desc">No AE activity for 5 min. Move anything in AE to resume.</span></div>
-        <div class="status-item"><div class="dot orange"></div><span class="label">Grace period…</span><span class="desc">AE lost focus. Timer still running, stops after 60 seconds.</span></div>
-        <div class="status-item"><div class="dot red"></div><span class="label">Paused / No project</span><span class="desc">No project open, or tracking is stopped for another reason.</span></div>
-      </div>
-    </section>
-
-    <section id="project-list">
-      <div class="section-label">Project list</div>
-      <h2>Clicking projects</h2>
-      <p>The list at the bottom of the panel shows all tracked projects sorted by most time spent.</p>
-      <div class="steps">
-        <div class="step"><span class="step-num">1×</span><div class="step-body"><h3>Single click — expand sessions</h3><p>Shows your last 8 work sessions: date, time range (e.g. 09:14 – 11:02), and duration. Click again to collapse.</p></div></div>
-        <div class="step"><span class="step-num">2×</span><div class="step-body"><h3>Double click — view in timer</h3><p>The big timer switches to show that project's total even if it's not currently open. A "viewing" badge appears above the timer. Double click again to go back.</p></div></div>
-      </div>
-    </section>
-
-    <section id="settings">
-      <div class="section-label">Settings</div>
-      <h2>The two toggles</h2>
-      <p>Both settings are saved automatically and persist between sessions.</p>
-      <div class="settings-list">
-        <div class="setting-card">
-          <div class="setting-header"><span class="setting-name">Grace Period</span><div class="toggle-demo"></div></div>
-          <p>When AE loses focus, the timer keeps running for 60 seconds before stopping — so quick alt-tabs don't break your session. Turn this off if you want the timer to stop the instant AE loses focus.</p>
-        </div>
-        <div class="setting-card">
-          <div class="setting-header"><span class="setting-name">Idle Pause <span style="font-size:10px;color:#3a3a3a;">5 min</span></span><div class="toggle-demo"></div></div>
-          <p>If nothing changes in your AE project for 5 minutes, tracking pauses automatically. Any activity (moving the timeline, changing a layer, etc.) resumes it. Turn off to keep the timer running no matter what.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="export">
-      <div class="section-label">Export</div>
-      <h2>Getting your data out</h2>
-      <p>Both export buttons open a native folder picker — you choose exactly where the file lands.</p>
-      <div class="export-cards">
-        <div class="export-card">
-          <div class="tag">.txt</div>
-          <h3>Export Stats</h3>
-          <p>A full breakdown of the currently open project: time spent, every comp with its dimensions and FPS, layer counts by type (text, shape, null, adjustment, solid), every effect used and how many times, and all linked footage files.</p>
-        </div>
-        <div class="export-card">
-          <div class="tag">.csv</div>
-          <h3>Export CSV</h3>
-          <p>Every recorded session across all projects in one file. Each row is one session: project name, date, start time, end time, duration, total minutes. Opens directly in Excel, Numbers, or Google Sheets.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="faq">
-      <div class="section-label">FAQ</div>
-      <h2>Common questions</h2>
-      <div class="faq-list">
-
-        <div class="faq-item">
-          <div class="faq-q">The timer isn't starting when I open a project.</div>
-          <div class="faq-a">Make sure the panel is open at least once (Window → VAUX). VAUX only detects saved <code>.aep</code> files — unsaved new projects have no file path and won't register. Save your project first, then it will start tracking immediately.</div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">It says "Paused" even though I'm actively working.</div>
-          <div class="faq-a">Another window is likely sitting on top of After Effects. Click anywhere inside AE to bring it to the front. If Grace Period is on, tracking resumes instantly. If it's off, you need to bring AE into focus first.</div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">Idle Pause keeps triggering when I'm active.</div>
-          <div class="faq-a">Idle detection watches for changes in AE's state (layer count, timeline position, selected layers, active comp). If you're reviewing your comp or doing something AE can't detect as a change, it may think you're idle. Toggle Idle Pause off in the panel to disable this entirely.</div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">Does closing or undocking the panel stop tracking?</div>
-          <div class="faq-a">No. Tracking runs inside After Effects' own scripting engine, not inside the panel's browser. You can close the panel, undock it, hide it — the timer keeps accumulating. Reopen the panel anytime to see your current totals.</div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">Will I lose data if After Effects crashes?</div>
-          <div class="faq-a">You'll lose at most 10 seconds. VAUX flushes accumulated time to disk every 10 seconds, so crashes only cost you the current unsaved window. All previous sessions and totals are safe.</div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">How do I reset a project's tracked time?</div>
-          <div class="faq-a">Your data lives in a file at <code>Documents/AETimeTracker/data.json</code>. Open it in any text editor (Notepad, TextEdit, VS Code), find the entry matching your project's file path, set <code>total</code> to <code>0</code>, and clear the <code>sessions</code> array to <code>[]</code>. Save the file and reopen the panel.</div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">My data disappeared after reinstalling VAUX.</div>
-          <div class="faq-a">Reinstalling the extension doesn't touch <code>Documents/AETimeTracker/data.json</code> — that file is completely separate from the extension folder. If it's gone, check if your Documents folder syncs to iCloud or OneDrive, which may have moved or conflicted the file.</div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-q">Does this work on Mac and Windows?</div>
-          <div class="faq-a">Yes. VAUX is a standard CEP panel and handles file paths correctly on both platforms. It targets After Effects CC 2019 (v16.0) and all versions after that.</div>
-        </div>
-
-      </div>
-    </section>
-
+<div class="section">
+  <h2>Status</h2>
+  <div class="status">
+    <div><span class="dot green"></span>Tracking</div>
+    <div><span class="dot yellow"></span>Idle</div>
+    <div><span class="dot orange"></span>Grace period</div>
+    <div><span class="dot red"></span>Paused</div>
   </div>
+</div>
 
-  <footer>
-    <div class="footer-left">
-      <span class="brand">VAUX</span>
-      <span class="by">by xvvo</span>
-    </div>
-    <span class="foot-right">free · local · no account</span>
-  </footer>
-
+</div>
 </body>
 </html>
