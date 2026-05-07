@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LUMINA · Stats Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Nunito:wght@400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #131313;
+      --surface:  #191919;
+      --border:   #242424;
+      --border2:  #2e2e2e;
+      --text:     #d0d0d0;
+      --muted:    #707070;
+      --dim:      #444;
+      --accent:   #a8f0ff;
+      --accent2:  #a8d8f0;
+      --green:    #7ecba1;
+      --glow:     #a8f0ff22;
+      --font:     'Outfit', sans-serif;
+      --mono:     'JetBrains Mono', monospace;
+      --display:  'Nunito', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      border-bottom: 1px solid var(--border);
+      padding: 13px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+
+    .topbar-logo {
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: 16px;
+      letter-spacing: 5px;
+      color: var(--accent);
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .topbar-badge {
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .topbar-link {
+      font-size: 9px;
+      color: var(--dim);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+
+    .topbar-link:hover { color: var(--accent2); }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 28px 80px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 36px 0 32px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 36px;
+    }
+
+    .hero-label {
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .hero-name {
+      font-family: var(--font);
+      font-size: 26px;
+      font-weight: 300;
+      color: #e8e8e8;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .hero-path {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--dim);
+      margin-bottom: 24px;
+      word-break: break-all;
+    }
+
+    .hero-time {
+      font-family: var(--font);
+      font-size: 64px;
+      font-weight: 200;
+      color: var(--accent);
+      letter-spacing: 2px;
+      line-height: 1;
+      text-shadow: 0 0 40px #a8f0ff28, 0 0 80px #a8f0ff10;
+      margin-bottom: 16px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .hero-meta-val {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--accent2);
+      font-weight: 300;
+    }
+
+    .hero-meta-key {
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .gen-date {
+      font-size: 10px;
+      color: var(--dim);
+      margin-top: 18px;
+      font-family: var(--mono);
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      margin-bottom: 36px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 9px;
+      color: var(--muted);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── KV TABLE ── */
+    .kv-table {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px 20px;
+    }
+
+    .kv-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid #1e1e1e;
+    }
+
+    .kv-row:last-child { border-bottom: none; }
+
+    .kv-key {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    .kv-val {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text);
+      font-weight: 300;
+    }
+
+    .kv-val.accent { color: var(--accent2); }
+
+    /* ── BARS ── */
+    .bar-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .bar-label {
+      font-size: 10px;
+      color: var(--muted);
+      width: 82px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 3px;
+      background: #252525;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      opacity: 0.6;
+      transition: width 0.6s ease;
+    }
+
+    .bar-fill.dim { opacity: 0.3; }
+
+    .bar-count {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--dim);
+      width: 60px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ── GRID CARDS ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px 14px;
+    }
+
+    .stat-card-val {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--accent2);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .stat-card-key {
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    /* ── COMP LIST ── */
+    .comp-list { display: flex; flex-direction: column; gap: 6px; }
+
+    .comp-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .comp-item.star { border-left: 2px solid var(--accent); }
+
+    .comp-name {
+      font-size: 11px;
+      color: var(--text);
+      font-weight: 300;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .comp-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--dim);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── EFFECT BARS ── */
+    .effect-bar-label {
+      width: 160px;
+    }
+
+    /* ── ALL PROJECTS ── */
+    .proj-bar-label {
+      width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── EMPTY / ERROR ── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--dim);
+    }
+
+    .empty-state .e-title {
+      font-family: var(--display);
+      font-size: 18px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      opacity: 0.5;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .empty-state .e-text {
+      font-size: 11px;
+      color: var(--dim);
+      line-height: 1.8;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    /* ── SESSION TIMELINE ── */
+    .session-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .session-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #1d1d1d;
+    }
+
+    .session-row:last-child { border-bottom: none; }
+
+    .sess-date-range {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sess-date-str {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .sess-time-range {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--dim);
+    }
+
+    .sess-dur-str {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent2);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: var(--display);
+      font-weight: 500;
+      font-size: 22px;
+      letter-spacing: 5px;
+      color: #505050;
+      text-transform: uppercase;
+    }
+
+    .footer-handle {
+      font-family: var(--display);
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: #404040;
+    }
+
+    /* ── DOW GRID ── */
+    .dow-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .dow-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dow-day {
+      font-size: 9px;
+      color: var(--dim);
+      letter-spacing: 0.5px;
+    }
+
+    .dow-block {
+      width: 100%;
+      border-radius: 2px;
+      background: #252525;
+      position: relative;
+      overflow: hidden;
+      min-height: 4px;
+    }
+
+    .dow-inner {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: var(--accent);
+      opacity: 0.55;
+      transition: height 0.6s ease;
+    }
+
+    .dow-count {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--dim);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 540px) {
+      .kv-table { grid-template-columns: 1fr; }
+      .hero-time { font-size: 48px; }
+      .topbar { padding: 12px 16px; }
+      .main { padding: 28px 16px 60px; }
+      .footer { padding: 20px 16px; }
+    }
+
+    /* ── FADE-IN ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .section { animation: fadeUp 0.4s ease both; }
+    .section:nth-child(2) { animation-delay: 0.05s; }
+    .section:nth-child(3) { animation-delay: 0.10s; }
+    .section:nth-child(4) { animation-delay: 0.15s; }
+    .section:nth-child(5) { animation-delay: 0.20s; }
+    .section:nth-child(6) { animation-delay: 0.25s; }
+    .section:nth-child(7) { animation-delay: 0.30s; }
+    .section:nth-child(8) { animation-delay: 0.35s; }
+
+    .no-section { display: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ── TOP BAR ── -->
+  <div class="topbar">
+    <div class="topbar-logo">Lumina</div>
+    <div class="topbar-right">
+      <span class="topbar-badge">Stats Report</span>
+      <a class="topbar-link" href="https://xvvo.github.io/xvvo-ae-tracker/">← Back to site</a>
+    </div>
+  </div>
+
+  <!-- ── CONTENT ── -->
+  <div class="main" id="main-content">
+    <div class="empty-state" id="empty-state">
+      <div class="e-title">No Data</div>
+      <div class="e-text">
+        Open this page from inside the LUMINA plugin by clicking
+        <strong style="color:#a8d8f088">Export Stats → Open in Browser</strong>.
+        Your stats are encoded directly in the URL.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <div class="footer-logo">xvvo</div>
+    <div class="footer-handle">@1xvvo</div>
+  </div>
+
+<script>
+(function() {
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function pad(n) { return n < 10 ? '0' + n : String(n); }
+
+  function fmtTime(s) {
+    s = Math.max(0, Math.floor(s || 0));
+    return pad(Math.floor(s/3600)) + ':' + pad(Math.floor((s%3600)/60)) + ':' + pad(s%60);
+  }
+
+  function fmtDur(secs) {
+    secs = Math.max(0, Math.floor(secs || 0));
+    var h = Math.floor(secs/3600), m = Math.floor((secs%3600)/60), s = secs%60;
+    var p = [];
+    if (h) p.push(h + 'h');
+    if (m || h) p.push(m + 'm');
+    p.push(s + 's');
+    return p.join(' ');
+  }
+
+  function fmtDate(ts) {
+    var d = new Date(ts);
+    return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()] + ' '
+      + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]
+      + ' ' + d.getDate() + ' ' + d.getFullYear();
+  }
+
+  function fmtTOD(ts) {
+    var d = new Date(ts);
+    return pad(d.getHours()) + ':' + pad(d.getMinutes());
+  }
+
+  function fileName(p) {
+    if (!p) return '—';
+    return p.replace(/\\/g, '/').split('/').pop();
+  }
+
+  function pct(a, b) { return b > 0 ? Math.round((a/b)*100) : 0; }
+
+  function barW(val, max) {
+    if (!max || max === 0) return '0%';
+    return Math.round((val / max) * 100) + '%';
+  }
+
+  function section(title, inner, id) {
+    return '<div class="section"' + (id ? ' id="' + id + '"' : '') + '>'
+      + '<div class="section-header"><span class="section-title">' + title + '</span><div class="section-line"></div></div>'
+      + inner
+      + '</div>';
+  }
+
+  function kv(key, val, accent) {
+    return '<div class="kv-row"><span class="kv-key">' + key + '</span>'
+      + '<span class="kv-val' + (accent ? ' accent' : '') + '">' + val + '</span></div>';
+  }
+
+  function barRow(label, val, max, suffix, labelClass) {
+    return '<div class="bar-row">'
+      + '<span class="bar-label ' + (labelClass||'') + '">' + label + '</span>'
+      + '<div class="bar-track"><div class="bar-fill" style="width:' + barW(val, max) + '"></div></div>'
+      + '<span class="bar-count">' + suffix + '</span>'
+      + '</div>';
+  }
+
+  // ── Decode hash ────────────────────────────────────────────────────────────
+  var hash = location.hash.slice(1);
+  if (!hash) return; // show empty state
+
+  var data;
+  try {
+    data = JSON.parse(decodeURIComponent(escape(atob(hash))));
+  } catch(e) {
+    try { data = JSON.parse(atob(hash)); } catch(e2) {
+      document.getElementById('empty-state').querySelector('.e-text').textContent
+        = 'Could not decode stats data. Try re-exporting from the plugin.';
+      return;
+    }
+  }
+
+  // ── Hide empty state ───────────────────────────────────────────────────────
+  document.getElementById('empty-state').style.display = 'none';
+
+  // ── Unpack data ────────────────────────────────────────────────────────────
+  var ae        = data.aeStats    || {};
+  var td        = data.timeData   || { total: 0, sessions: [] };
+  var sessions  = td.sessions     || [];
+  var allProj   = data.allProjects || {};
+  var projName  = data.projectName || fileName(data.projectPath) || 'Unknown Project';
+  var projPath  = data.projectPath || '';
+  var genAt     = data.generatedAt ? new Date(data.generatedAt) : new Date();
+
+  // ── Session analysis ───────────────────────────────────────────────────────
+  var total      = td.total || 0;
+  var sessCount  = sessions.length;
+  var longest = 0, shortest = Infinity, firstSess = Infinity, lastSess = 0;
+  var dowCounts  = [0,0,0,0,0,0,0];
+  var morning = 0, afternoon = 0, evening = 0, night = 0;
+  var weekday = 0, weekend = 0;
+  var daySet = {};
+
+  sessions.forEach(function(s) {
+    if (s.dur > longest)  longest  = s.dur;
+    if (s.dur < shortest) shortest = s.dur;
+    if (s.start < firstSess) firstSess = s.start;
+    if (s.end   > lastSess)  lastSess  = s.end;
+    var d = new Date(s.start), dow = d.getDay(), h = d.getHours();
+    dowCounts[dow]++;
+    if (dow === 0 || dow === 6) weekend++; else weekday++;
+    if      (h >= 5  && h < 12) morning++;
+    else if (h >= 12 && h < 17) afternoon++;
+    else if (h >= 17 && h < 22) evening++;
+    else                        night++;
+    daySet[d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate()] = true;
+  });
+
+  if (shortest === Infinity) shortest = 0;
+  var daysWorked = Object.keys(daySet).length;
+  var avgSession = sessCount > 0 ? Math.floor(total / sessCount) : 0;
+  var avgPerDay  = daysWorked > 0 ? Math.floor(total / daysWorked) : 0;
+  var peakDow    = dowCounts.indexOf(Math.max.apply(null, dowCounts));
+
+  var dowNames  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var dowShort  = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+
+  var tod = [
+    { label: 'Morning',   count: morning   },
+    { label: 'Afternoon', count: afternoon },
+    { label: 'Evening',   count: evening   },
+    { label: 'Night',     count: night     }
+  ];
+  tod.sort(function(a,b){ return b.count - a.count; });
+  var peakTOD = tod[0].label;
+
+  // ── AE stats ───────────────────────────────────────────────────────────────
+  var totalEffectUses = 0;
+  (ae.effectList || []).forEach(function(e){ totalEffectUses += e.count; });
+
+  var layerTypes = [];
+  if (ae.totalLayers > 0) {
+    layerTypes = [
+      { type: 'Shape',      count: ae.shapeLayers      || 0 },
+      { type: 'Text',       count: ae.textLayers        || 0 },
+      { type: 'Solid',      count: ae.solidLayers       || 0 },
+      { type: 'Null',       count: ae.nullLayers        || 0 },
+      { type: 'Adjustment', count: ae.adjustmentLayers  || 0 }
+    ].filter(function(t){ return t.count > 0; });
+    layerTypes.sort(function(a,b){ return b.count - a.count; });
+  }
+
+  var mostLayersComp = '';
+  var mostLayersCount = 0;
+  (ae.compDetails || []).forEach(function(c){
+    if (c.layers > mostLayersCount) { mostLayersCount = c.layers; mostLayersComp = c.name; }
+  });
+
+  // ── All-project stats ──────────────────────────────────────────────────────
+  var allTotal = 0, allCount = 0;
+  var allEntries = [];
+  Object.keys(allProj).forEach(function(k) {
+    var t = allProj[k] && (allProj[k].total || 0);
+    if (t > 0) { allTotal += t; allCount++; allEntries.push({ name: fileName(k), path: k, total: t }); }
+  });
+  allEntries.sort(function(a,b){ return b.total - a.total; });
+  var maxAllTotal = allEntries.length > 0 ? allEntries[0].total : 1;
+
+  // ── BUILD HTML ─────────────────────────────────────────────────────────────
+  var html = '';
+
+  // ── HERO ────────────────────────────────────────────────────────────────────
+  html += '<div class="hero">';
+  html += '<div class="hero-label">Project</div>';
+  html += '<div class="hero-name">' + esc(projName) + '</div>';
+  if (projPath && projPath !== projName) {
+    html += '<div class="hero-path">' + esc(projPath) + '</div>';
+  }
+  html += '<div class="hero-time">' + fmtTime(total) + '</div>';
+  html += '<div class="hero-meta">';
+  if (sessCount > 0) {
+    html += metaItem(String(sessCount), 'Sessions');
+    html += metaItem(String(daysWorked), daysWorked === 1 ? 'Day worked' : 'Days worked');
+    if (firstSess < Infinity) html += metaItem(fmtDate(firstSess), 'First session');
+  } else {
+    html += metaItem('No sessions yet', 'History');
+  }
+  html += '</div>';
+  html += '<div class="gen-date">Generated ' + genAt.toLocaleString() + '</div>';
+  html += '</div>';
+
+  function metaItem(val, key) {
+    return '<div class="hero-meta-item"><span class="hero-meta-val">' + esc(val) + '</span><span class="hero-meta-key">' + key + '</span></div>';
+  }
+
+  // ── TIME SUMMARY ────────────────────────────────────────────────────────────
+  var timeRows = '<div class="kv-table">';
+  timeRows += '<div>';
+  timeRows += kv('Total tracked',   fmtDur(total), true);
+  timeRows += kv('Sessions logged', sessCount > 0 ? String(sessCount) : 'none yet');
+  timeRows += kv('Avg session',     sessCount > 0 ? fmtDur(avgSession) : '—');
+  timeRows += kv('Longest session', sessCount > 0 ? fmtDur(longest)    : '—');
+  timeRows += '</div><div>';
+  timeRows += kv('Shortest session', sessCount > 0 ? fmtDur(shortest) : '—');
+  timeRows += kv('Days worked',      daysWorked > 0 ? daysWorked + (daysWorked === 1 ? ' day' : ' days') : '—');
+  timeRows += kv('Avg per work day', daysWorked > 0 ? fmtDur(avgPerDay) : '—');
+  timeRows += kv('Weekday / weekend', sessCount > 0 ? weekday + ' / ' + weekend : '—');
+  timeRows += '</div></div>';
+  html += section('Time Summary', timeRows);
+
+  // ── WORK PATTERN ────────────────────────────────────────────────────────────
+  if (sessCount > 0) {
+    var maxDow  = Math.max.apply(null, dowCounts) || 1;
+    var maxTOD  = Math.max(morning, afternoon, evening, night) || 1;
+
+    var patternHTML = '';
+
+    // Peak info
+    patternHTML += '<div class="kv-table" style="margin-bottom:20px"><div>';
+    patternHTML += kv('Peak time of day',  peakTOD + '  (' + tod[0].count + (tod[0].count===1?' session':' sessions') + ')');
+    patternHTML += kv('Most active day',   dowNames[peakDow] + '  (' + dowCounts[peakDow] + (dowCounts[peakDow]===1?' session':' sessions') + ')');
+    patternHTML += '</div></div>';
+
+    // DOW grid
+    patternHTML += '<div style="margin-bottom:6px;font-size:9px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;">Day of week</div>';
+    var dowBarH = 48;
+    patternHTML += '<div class="dow-grid" style="margin-bottom:20px">';
+    dowShort.forEach(function(name, i) {
+      var c = dowCounts[i];
+      var h = Math.max(4, Math.round((c / maxDow) * dowBarH));
+      patternHTML += '<div class="dow-cell">'
+        + '<div class="dow-block" style="height:' + dowBarH + 'px"><div class="dow-inner" style="height:' + h + 'px"></div></div>'
+        + '<div class="dow-day">' + name + '</div>'
+        + '<div class="dow-count">' + c + '</div>'
+        + '</div>';
+    });
+    patternHTML += '</div>';
+
+    // TOD bars
+    patternHTML += '<div style="margin-bottom:8px;font-size:9px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;">Time of day</div>';
+    patternHTML += '<div class="bar-list">';
+    [
+      { label: 'Morning',   count: morning   },
+      { label: 'Afternoon', count: afternoon },
+      { label: 'Evening',   count: evening   },
+      { label: 'Night',     count: night     }
+    ].forEach(function(t) {
+      patternHTML += barRow(t.label, t.count, maxTOD, t.count + (t.count===1?' session':' sessions'));
+    });
+    patternHTML += '</div>';
+
+    html += section('Work Pattern', patternHTML);
+  }
+
+  // ── RECENT SESSIONS ────────────────────────────────────────────────────────
+  if (sessCount > 0) {
+    var recentSess = sessions.slice().reverse().slice(0, 10);
+    var sessHTML = '<div class="session-grid">';
+    recentSess.forEach(function(s) {
+      sessHTML += '<div class="session-row">'
+        + '<div class="sess-date-range">'
+        + '<span class="sess-date-str">' + fmtDate(s.start) + '</span>'
+        + '<span class="sess-time-range">' + fmtTOD(s.start) + ' – ' + fmtTOD(s.end) + '</span>'
+        + '</div>'
+        + '<span class="sess-dur-str">' + fmtDur(s.dur) + '</span>'
+        + '</div>';
+    });
+    if (sessCount > 10) {
+      sessHTML += '<div style="font-size:9px;color:var(--dim);padding:6px 0;">+ ' + (sessCount-10) + ' earlier sessions</div>';
+    }
+    sessHTML += '</div>';
+    html += section('Recent Sessions (' + sessCount + ')', sessHTML);
+  }
+
+  // ── PROJECT OVERVIEW ────────────────────────────────────────────────────────
+  if (ae.compCount !== undefined) {
+    var overviewHTML = '<div class="stat-grid" style="margin-bottom:20px">';
+    overviewHTML += statCard(ae.compCount || 0,           'Compositions');
+    overviewHTML += statCard(ae.totalLayers || 0,         'Total Layers');
+    overviewHTML += statCard((ae.effectList||[]).length,   'Unique Effects');
+    overviewHTML += statCard(totalEffectUses,              'Effect Uses');
+    overviewHTML += statCard(ae.footageCount || 0,        'Footage Items');
+    if (ae.totalLayers > 0) {
+      overviewHTML += statCard(((totalEffectUses / ae.totalLayers) || 0).toFixed(2), 'Effects / Layer');
+    }
+    overviewHTML += '</div>';
+
+    if (layerTypes.length > 0) {
+      var maxLT = layerTypes[0].count || 1;
+      overviewHTML += '<div style="margin-bottom:8px;font-size:9px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;">Layer breakdown</div>';
+      overviewHTML += '<div class="bar-list">';
+      layerTypes.forEach(function(t) {
+        overviewHTML += barRow(t.type, t.count, maxLT, t.count + '  (' + pct(t.count, ae.totalLayers) + '%)');
+      });
+      overviewHTML += '</div>';
+    }
+
+    html += section('Project Overview', overviewHTML);
+  }
+
+  function statCard(val, key) {
+    return '<div class="stat-card"><div class="stat-card-val">' + esc(String(val)) + '</div><div class="stat-card-key">' + key + '</div></div>';
+  }
+
+  // ── COMPOSITIONS ────────────────────────────────────────────────────────────
+  if (ae.compDetails && ae.compDetails.length > 0) {
+    var sorted = ae.compDetails.slice().sort(function(a,b){ return b.layers - a.layers; });
+    var compsHTML = '<div class="comp-list">';
+    sorted.forEach(function(c) {
+      var isStar = (c.name === mostLayersComp);
+      compsHTML += '<div class="comp-item' + (isStar ? ' star' : '') + '">'
+        + '<span class="comp-name">' + (isStar ? '★ ' : '') + esc(c.name) + '</span>'
+        + '<span class="comp-meta">' + c.width + '×' + c.height + '  ·  ' + c.fps + ' fps  ·  ' + c.layers + ' layers</span>'
+        + '</div>';
+    });
+    compsHTML += '</div>';
+    html += section('Compositions (' + ae.compDetails.length + ')', compsHTML);
+  }
+
+  // ── EFFECTS ────────────────────────────────────────────────────────────────
+  if (ae.effectList && ae.effectList.length > 0) {
+    var maxFX = ae.effectList[0].count || 1;
+    var fxHTML = '<div class="bar-list">';
+    ae.effectList.slice(0, 25).forEach(function(e) {
+      fxHTML += barRow(esc(e.name), e.count, maxFX, '×' + e.count, 'effect-bar-label');
+    });
+    if (ae.effectList.length > 25) {
+      fxHTML += '<div style="font-size:9px;color:var(--dim);padding:4px 0;">+ ' + (ae.effectList.length - 25) + ' more effects</div>';
+    }
+    fxHTML += '</div>';
+    html += section('Effects (' + ae.effectList.length + ' unique · ' + totalEffectUses + ' uses)', fxHTML);
+  }
+
+  // ── ALL PROJECTS ────────────────────────────────────────────────────────────
+  if (allEntries.length > 1) {
+    var projHTML = '';
+    projHTML += '<div style="margin-bottom:14px"><div class="kv-row"><span class="kv-key">Total time (all projects)</span><span class="kv-val accent">' + fmtDur(allTotal) + '</span></div></div>';
+    projHTML += '<div class="bar-list">';
+    allEntries.forEach(function(e) {
+      var isThis = (e.path === data.projectPath);
+      projHTML += '<div class="bar-row">'
+        + '<span class="bar-label proj-bar-label" style="' + (isThis ? 'color:var(--accent2)' : '') + '">'
+        + (isThis ? '▸ ' : '') + esc(e.name) + '</span>'
+        + '<div class="bar-track"><div class="bar-fill' + (isThis ? '' : ' dim') + '" style="width:' + barW(e.total, maxAllTotal) + '"></div></div>'
+        + '<span class="bar-count">' + fmtDur(e.total) + '</span>'
+        + '</div>';
+    });
+    projHTML += '</div>';
+    html += section('All Projects (' + allCount + ' tracked)', projHTML);
+  }
+
+  // ── Render ─────────────────────────────────────────────────────────────────
+  document.getElementById('main-content').innerHTML = html;
+
+  function esc(str) {
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+})();
+</script>
+</body>
+</html>
